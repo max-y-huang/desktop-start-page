@@ -27,6 +27,8 @@ const searchBarPlaceholder = 'Search ...';
 
 import { css, run } from 'uebersicht';
 
+const __dir__ = 'start-page.widget';
+
 export const command = 'echo $(date +%a_%B_%d_%I_%M_%p)';  // deliminate time elements with '_'
 export const refreshFrequency = 100;                       // update every 100ms
 export const className = {                                 // root element style
@@ -109,7 +111,7 @@ export const render = ({ output }) => {
       <div className={styles.date}>{`${day}, ${month} ${date}`}</div>
       {showSearchBar && (
         <div className={styles.search}>
-          <img src='start-screen__search-icon.svg' />
+          <img src={`${__dir__}/search-icon.svg`} />
           <input className={styles.useCursor} type='text' placeholder={searchBarPlaceholder} onKeyUp={search} />
         </div>
       )}
