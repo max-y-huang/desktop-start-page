@@ -12,5 +12,3 @@ Works on OSX (MacOS).
 2. In the menu bar, under the Übersicht icon, click **Open Widgets Folder**.
 3. Put the contents from `/widget` into the folder.
 4. (Optional) In the menu bar, under the Übersicht icon, click **Preferences...** and check **Launch Übersicht when I login**.
-
-**WARNING:** Desktop Start Screen prevents mouse interactions with other items on the desktop (e.g. files, folders).
