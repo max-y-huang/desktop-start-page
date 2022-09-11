@@ -99,6 +99,7 @@ export const render = ({ output }) => {
     if (event.key === 'Enter') {
       run(`open "${searchURL.replace('<QUERY>', encodeURIComponent(event.target.value))}"`);
       event.target.value = '';
+      event.target.blur();
     }
   };
 
