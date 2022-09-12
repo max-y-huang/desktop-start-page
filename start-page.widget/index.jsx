@@ -11,7 +11,7 @@ const position = {
 };
 
 // Theme can be 'light' or 'dark'.
-const theme = 'dark';
+const theme = 'light';
 
 // Font settings.
 const mainFont = 'Baloo Bhaijaan';
