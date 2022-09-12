@@ -1,10 +1,10 @@
-# Desktop Start Page
+# Start Page
 
 An aesthetically pleasing [Übersicht](http://tracesof.net/uebersicht/) widget that shows the datetime and a web search bar (e.g. defaults to Google).
 
 Works on OSX (MacOS).
 
-![Screenshot](widget-screenshot.png)
+![Screenshot](screenshot.png)
 
 ## Installation
 

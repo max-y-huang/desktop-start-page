@@ -1,0 +1,10 @@
+{
+  "highlight.regexes": {
+    "(<[^>]*>)": {
+      "filterFileRegex": "styles.json",
+      "decorations": [
+        { "color": "#acf" }
+      ]
+    }
+  }
+}

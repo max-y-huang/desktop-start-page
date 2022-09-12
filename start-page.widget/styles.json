@@ -1,0 +1,92 @@
+{
+  "ignoreCursor": {
+    "pointerEvents": "none",
+    "userSelect": "none",
+    "cursor": "default"
+  },
+  "useCursor": {
+    "pointerEvents": "auto",
+    "userSelect": "auto",
+    "cursor": "auto"
+  },
+  "time": {
+    "color": "<color.dateTime>",
+    "textAlign": "center",
+    "fontFamily": "<font.dateTime>",
+    "fontSize": "7.5em",
+    "textShadow": "4px 4px <color.shadow>",
+    "lineHeight": 1,
+    "letterSpacing": "0.05em",
+    "& > span:nth-child(2)": {
+      "marginLeft": "0.3em",
+      "fontSize": "0.33em",
+      "textTransform": "uppercase",
+      "letterSpacing": "0.1em"
+    }
+  },
+  "date": {
+    "color": "<color.dateTime>",
+    "textAlign": "center",
+    "fontFamily": "<font.dateTime>",
+    "fontSize": "1.3em",
+    "textShadow": "3px 3px <color.shadow>",
+    "textTransform": "uppercase",
+    "letterSpacing": "0.1em"
+  },
+  "search": {
+    "color": "<color.search.text>",
+    "fontFamily": "<font.search>",
+    "marginTop": "3em",
+    "borderRadius": "1.25em",
+    "backgroundColor": "<color.search.background>",
+    "overflow": "hidden",
+    "boxShadow": "0 4px 8px 0 <color.shadow>, 0 6px 20px 0 <color.shadow>"
+  },
+  "searchBar": {
+    "width": 540,
+    "height": "2.5em",
+    "display": "flex",
+    "& > img": {
+      "padding": "0.75em 0",
+      "filter": "<color.search.icon>"
+    },
+    "& > input[type='search']": {
+      "margin": 0,
+      "padding": "0 0.75em 0 0",
+      "outline": "none",
+      "border": "none",
+      "background": "none",
+      "color": "inherit",
+      "flexGrow": 1,
+      "fontSize": "1.2em",
+      "&::placeholder": {
+        "color": "<color.search.placeholder>"
+      }
+    }
+  },
+  "searchSuggestions": {
+    "listStyleType": "none",
+    "margin": 0,
+    "padding": 0,
+    "&:before": {
+      "content": "''",
+      "display": "block",
+      "width": "calc(100% - 2.5em)",
+      "marginLeft": "1.25em",
+      "borderTop": "1px solid <color.search.divider>"
+    },
+    "& > li": {
+      "display": "flex",
+      "alignItems": "center",
+      "margin": 0,
+      "padding": "0 0.75em 0 2.5em",
+      "outline": "none",
+      "height": "2.5em",
+      "cursor": "default",
+      "transition": "background-color 0.15s ease-in",
+      "&:hover, &:active, &:focus": {
+        "backgroundColor": "<color.search.backgroundHover>"
+      }
+    }
+  }
+}

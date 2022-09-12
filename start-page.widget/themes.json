@@ -1,0 +1,38 @@
+{
+  "light": {
+    "font": {
+      "dateTime": "Baloo Bhaijaan",
+      "search": "Helvetica Neue"
+    },
+    "color": {
+      "dateTime": "#fff",
+      "search": {
+        "text": "#000",
+        "placeholder": "#aaa",
+        "background": "#fff",
+        "backgroundHover": "#eee",
+        "divider": "#aaa",
+        "icon": "brightness(0)"
+      },
+      "shadow": "#0001"
+    }
+  },
+  "dark": {
+    "font": {
+      "dateTime": "Baloo Bhaijaan",
+      "search": "Helvetica Neue"
+    },
+    "color": {
+      "dateTime": "#222",
+      "search": {
+        "text": "#fff",
+        "placeholder": "#888",
+        "background": "#222",
+        "backgroundHover": "#333",
+        "divider": "#888",
+        "icon": "brightness(1)"
+      },
+      "shadow": "#fff1"
+    }
+  }
+}
