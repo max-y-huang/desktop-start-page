@@ -32,8 +32,8 @@ import stylesTemplate from './styles.json';
 import themes from './themes.json';
 
 // source files
-const searchIconSrc = 'start-page.widget/search-icon.svg';
-const historySrc = 'start-page.widget/history';
+const searchIconSrc = 'home-base.widget/search-icon.svg';
+const historySrc = 'home-base.widget/history';
 
 /************************* 
  * BUSINESS LOGIC
