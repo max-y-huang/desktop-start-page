@@ -23,93 +23,17 @@ const searchBarPlaceholder = 'Google search ...';
 ////////////////// END OF USER SETTINGS. DO NOT EDIT FURTHER //////////////////
 
 
-/************************* 
- * SYSTEM SETTINGS
- *************************/
-
-import { run, css } from 'uebersicht';
-import stylesTemplate from './styles.json';
-import themes from './themes.json';
+import { makeStyles } from './src/funcs';
+import { getDateTimeData } from './src/dateTime';
+import { searchQuery, updateHistory, getSuggestions } from './src/search';
 
 // source files
-const searchIconSrc = 'home-base.widget/search-icon.svg';
-const historySrc = 'home-base.widget/history';
+const searchIconSrc = 'home-base.widget/src/imgs/searchIcon.svg';
+const historySrc = 'home-base.widget/.history';
 
-/************************* 
- * BUSINESS LOGIC
- *************************/
-
-const objectMap = (obj, fn) => {
-  return Object.fromEntries(Object.entries(obj).map(([key, val]) => [key, fn(val)]));
-};
-
-const assertFile = (src) => {
-  run(`if [ ! -f "${src}" ]; then touch ${src}; fi`);
-};
-
-const getDateTimeData = () => {
-  return new Promise((resolve) => {
-    run('echo $(date +%a_%B_%d_%I_%M_%p)').then((data) => {  // separate data with '_'
-      const [day, month, date, hour, minute, amPm] = data.split('_');
-      resolve({ day, month, date, hour, minute, amPm });
-    });
-  });
-}
-
-const searchQuery = (query) => {
-  run(`open "${searchURL.replace('<QUERY>', encodeURIComponent(query))}"`);
-}
-
-const updateHistory = (query, file) => {
-  assertFile(file);
-  return new Promise((resolve) => {
-    query = encodeURIComponent(query);
-    // update history with move-to-front heuristic
-    run(`cat "${file}"`).then((oldHistory) => {
-      const filtered = oldHistory.trim().split('\n').filter((item) => item.toLowerCase() !== query.toLowerCase());
-      const history = [query, ...filtered].join('\n');
-      run(`echo "${history}" > ${file}`).then(() => {
-        resolve();
-      });
-    });
-  });
-};
-
-const getSuggestions = async (query, file) => {
-  assertFile(file);
-  return new Promise((resolve) => {
-    query = encodeURIComponent(query);
-    run(`grep -F -i "${query}" "${file}"`).then((items) => {
-      let suggestions = [];
-      if (items !== '') {  // '' is an edge case that returns [ '' ] if handled
-        suggestions = items.trim().split('\n').map((item) => decodeURIComponent(item));
-      }
-      resolve(suggestions);
-    });
-  });
-};
-
-/************************* 
- * STYLING LOGIC
- *************************/
-
-const makeStyles = () => {
-  const themeData = themes[theme];  // used in eval step
-  const pattern = /<[^>]*>/;        // pattern to evaluate: <EXPRESSION>
-  let s = JSON.stringify(stylesTemplate);
-  while (s.match(pattern)) {
-    const match = s.match(pattern)[0];
-    s = s.replace(match, eval('themeData.' + match.slice(1, -1)));
-  }
-  return objectMap(JSON.parse(s), css);
-}
-
+// styles
 export const className = { ...position };  // root element style
-const styles = makeStyles();
-
-/************************* 
- * UI LOGIC
- *************************/
+const styles = makeStyles(theme);
 
 // handle polling
 export const refreshFrequency = 100;  // in milliseconds
@@ -147,7 +71,7 @@ export const render = ({ time, suggestions }, dispatch) => {
 
   const search = (query) => {
     const searchInputDOM = document.querySelector('#searchInput');
-    searchQuery(query);
+    searchQuery(searchURL, query);
     updateHistory(query, historySrc).then(() => {
       searchInputDOM.value = '';
       searchInputDOM.blur();
@@ -155,27 +79,16 @@ export const render = ({ time, suggestions }, dispatch) => {
     });
   };
 
-  const onSearchInputKeyDown = (event) => {
+  const onSearchElementKeyDown = (event, query) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      search(event.target.value);
+      search(query);
     }
     if (event.key === 'Escape') {
       event.preventDefault();
       event.target.blur();
     }
   };
-
-  const onSearchSuggestionKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      event.target.click();
-    }
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.target.blur();
-    }
-  }
 
   const { day, month, date, hour, minute, amPm } = time;
   return (
@@ -195,7 +108,7 @@ export const render = ({ time, suggestions }, dispatch) => {
               className={styles.useCursor}
               spellCheck={false}
               placeholder={searchBarPlaceholder}
-              onKeyDown={onSearchInputKeyDown}
+              onKeyDown={(event) => onSearchElementKeyDown(event, event.target.value)}
               onChange={(event) => showSuggestions(event.target.value)}
             />
           </div>
@@ -207,7 +120,7 @@ export const render = ({ time, suggestions }, dispatch) => {
                   tabIndex={0}
                   className={styles.useCursor}
                   onMouseDown={(event) => event.preventDefault()}  // prevent loss of focus
-                  onKeyDown={onSearchSuggestionKeyDown}
+                  onKeyDown={(event) => onSearchElementKeyDown(event, suggestion)}
                   onClick={() => search(suggestion)}
                 >
                   {suggestion}
