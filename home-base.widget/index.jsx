@@ -37,10 +37,9 @@ const styles = makeStyles(theme);
 
 // handle polling
 export const refreshFrequency = 100;  // in milliseconds
-export const command = (dispatch) => {
-  getDateTimeData().then((data) => {
-    dispatch({ type: 'time', data });
-  });
+export const command = async (dispatch) => {
+  const data = await getDateTimeData();
+  dispatch({ type: 'time', data });
 };
 
 // handle state management
@@ -54,29 +53,26 @@ export const render = ({ time, suggestions }, dispatch) => {
     return (document.querySelector('#searchContainer')?.contains(document.activeElement)) && (suggestions.length > 0);
   };
 
-  const showSuggestions = (query) => {
+  const showSuggestions = async (query) => {
     if (query === '') {  // edge case with empty query (since everything matches with '')
       dispatch({ type: 'suggestions', data: [] });
     }
     else {
-      getSuggestions(query, historySrc).then((data) => {
-        let suggestions = data;
-        if (maxSuggestions >= 0) {
-          suggestions = suggestions.slice(0, maxSuggestions);
-        }
-        dispatch({ type: 'suggestions', data: suggestions });
-      });
+      let suggestions = await getSuggestions(query, historySrc);
+      if (maxSuggestions >= 0) {
+        suggestions = suggestions.slice(0, maxSuggestions);
+      }
+      dispatch({ type: 'suggestions', data: suggestions });
     }
   };
 
-  const search = (query) => {
+  const search = async (query) => {
     const searchInputDOM = document.querySelector('#searchInput');
-    searchQuery(searchURL, query);
-    updateHistory(query, historySrc).then(() => {
-      searchInputDOM.value = '';
-      searchInputDOM.blur();
-      showSuggestions('');
-    });
+    await searchQuery(searchURL, query);
+    await updateHistory(query, historySrc);
+    searchInputDOM.value = '';
+    searchInputDOM.blur();
+    showSuggestions('');
   };
 
   const onSearchElementKeyDown = (event, query) => {

@@ -6,8 +6,8 @@ export const objectMap = (obj, fn) => {
   return Object.fromEntries(Object.entries(obj).map(([key, val]) => [key, fn(val)]));
 };
 
-export const assertFile = (src) => {
-  run(`if [ ! -f "${src}" ]; then touch ${src}; fi`);
+export const assertFile = async (src) => {
+  await run(`if [ ! -f "${src}" ]; then touch ${src}; fi`);
 };
 
 export const makeStyles = (theme) => {
