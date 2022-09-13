@@ -8,6 +8,7 @@
       "dateTime": "#fff",
       "search": {
         "text": "#000",
+        "textAccent": "#26c",
         "placeholder": "#aaa",
         "background": "#fff",
         "backgroundHover": "#eee",
@@ -26,6 +27,7 @@
       "dateTime": "#222",
       "search": {
         "text": "#fff",
+        "textAccent": "#8cf",
         "placeholder": "#888",
         "background": "#222",
         "backgroundHover": "#333",

@@ -17,13 +17,13 @@ const theme = 'light';
 const showSearchBar = true;
 const maxSuggestions = 6;  // set to -1 for unlimited suggestions
 const searchURL = 'https://www.google.com/search?q=<QUERY>';
-const searchBarPlaceholder = 'Google search ...';
+const searchBarPlaceholder = 'Search ...';
 
 
 ////////////////// END OF USER SETTINGS. DO NOT EDIT FURTHER //////////////////
 
 
-import { makeStyles } from './src/funcs';
+import { c, makeStyles } from './src/funcs';
 import { getDateTimeData } from './src/dateTime';
 import { searchQuery, updateHistory, getSuggestions } from './src/search';
 
@@ -66,22 +66,27 @@ export const render = ({ time, suggestions }, dispatch) => {
     }
   };
 
-  const search = async (query) => {
+  const clearSearch = () => {
     const searchInputDOM = document.querySelector('#searchInput');
-    await searchQuery(searchURL, query);
-    await updateHistory(query, historySrc);
     searchInputDOM.value = '';
-    searchInputDOM.blur();
     showSuggestions('');
+  }
+
+  const search = async (query) => {
+    await searchQuery(query, searchURL);
+    await updateHistory(query, historySrc);
+    clearSearch();
   };
 
   const onSearchElementKeyDown = (event, query) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       search(query);
+      event.target.blur();
     }
     if (event.key === 'Escape') {
       event.preventDefault();
+      clearSearch();
       event.target.blur();
     }
   };
@@ -110,11 +115,11 @@ export const render = ({ time, suggestions }, dispatch) => {
           </div>
           {showSuggestionsFlag() && (
             <ul className={styles.searchSuggestions}>
-              {suggestions.map((suggestion, i) => (
+              {suggestions.map(({ suggestion, fromHistory }) => (
                 <li
                   key={suggestion}
                   tabIndex={0}
-                  className={styles.useCursor}
+                  className={c(styles.useCursor, fromHistory ? 'fromHistory' : null)}
                   onMouseDown={(event) => event.preventDefault()}  // prevent loss of focus
                   onKeyDown={(event) => onSearchElementKeyDown(event, suggestion)}
                   onClick={() => search(suggestion)}
