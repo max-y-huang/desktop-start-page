@@ -29,14 +29,14 @@ import { searchQuery, updateHistory, getSuggestions } from './src/search';
 const searchModes = [
   {
     mode: 'search',
-    iconSrc: './home-base/home-base.widget/src/imgs/searchIcon.svg',
-    historySrc: './home-base/home-base.widget/.searchHistory',
+    iconSrc: './home-base/src/imgs/searchIcon.svg',
+    historySrc: './home-base/.searchHistory',
     searchPlaceholder: 'Search ...'
   },
   {
     mode: 'web',
-    iconSrc: './home-base/home-base.widget/src/imgs/webIcon.svg',
-    historySrc: './home-base/home-base.widget/.webHistory',
+    iconSrc: './home-base/src/imgs/webIcon.svg',
+    historySrc: './home-base/.webHistory',
     searchPlaceholder: 'https:// ...'
   }
 ];
