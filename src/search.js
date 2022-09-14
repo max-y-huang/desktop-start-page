@@ -1,5 +1,5 @@
 import { run } from 'uebersicht';
-import { assertFile } from "./funcs";
+import { assertFile, escapeRegExp } from "./funcs";
 
 const autoSuggestionsURL = 'https://api.datamuse.com/sug?s=<QUERY>';
 
@@ -25,20 +25,18 @@ export const addQueryToHistory = async (query, file) => {  // uses move-to-front
 export const removeQueryFromHistory = async (query, file) => {
   await assertFile(file);
   query = encodeURIComponent(query);
-  const oldHistory = await run(`cat "${file}"`);
-  const filtered = oldHistory.trim().split('\n').filter((item) => item.toLowerCase() !== query.toLowerCase());
+  const oldHistory = (await run(`cat "${file}"`)).trim().split('\n');
+  const filtered = oldHistory.filter((item) => item.toLowerCase() !== query.toLowerCase());
   const history = filtered.join('\n');
   await run(`echo "${history}" > ${file}`);
 };
 
 const getHistorySuggestions = async (query, file) => {
   await assertFile(file);
-  query = encodeURIComponent(query);
-  const items = await run(`grep -F -i "${query}" "${file}"`);
-  if (items === '') {  // edge case for ''
-    return [];
-  }
-  return items.trim().split('\n').map((item) => decodeURIComponent(item));
+  const history = (await run(`cat "${file}"`)).trim().split('\n').map((item) => decodeURIComponent(item));
+  const pattern = new RegExp(escapeRegExp(query), 'i');
+  const matches = history.filter((item) => item.match(pattern) !== null);
+  return matches;
 }
 
 const getAutoCompleteSuggestions = async (query, mode) => {

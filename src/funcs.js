@@ -6,6 +6,10 @@ export function c() {  // allows multiple classes to be passed to className; can
   return [ ...arguments ].join(' ');
 }
 
+export const escapeRegExp = (text) => {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 export const objectMap = (obj, fn) => {
   return Object.fromEntries(Object.entries(obj).map(([key, val]) => [key, fn(val)]));
 };
