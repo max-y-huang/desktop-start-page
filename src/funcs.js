@@ -1,5 +1,5 @@
 import { run, css } from 'uebersicht';
-import stylesTemplate from '../styles.json';
+import stylesTemplate from './styles.json';
 import themes from '../themes.json';
 
 export function c() {  // allows multiple classes to be passed to className; cannot be ES6 function

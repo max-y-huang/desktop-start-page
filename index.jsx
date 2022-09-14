@@ -13,6 +13,9 @@ const position = {
 // select theme from theme.json
 const theme = 'light';
 
+// date time settings
+const twentyFourHourClock = false;
+
 // search settings
 const showSearchBar = true;
 const maxSuggestions = 6;  // set to -1 for unlimited suggestions
@@ -50,7 +53,7 @@ const styles = makeStyles(theme);
 // handle polling
 export const refreshFrequency = 100;  // in milliseconds
 export const command = async (dispatch) => {
-  const data = await getDateTimeData();
+  const data = await getDateTimeData(twentyFourHourClock);
   dispatch({ type: 'time', data });
 };
 
@@ -151,7 +154,7 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
       <div className={styles.dateTime}>
         <div className={styles.time}>
           <span>{`${Number(hour)}:${minute}`}</span>
-          <span>{amPm}</span>
+          <span>{twentyFourHourClock ? null : amPm}</span>
         </div>
         <div className={styles.date}>{`${day}, ${month} ${date}`}</div>
       </div>
