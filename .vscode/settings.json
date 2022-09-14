@@ -1,7 +1,7 @@
 {
   "highlight.regexes": {
     "(<[^>]*>)": {
-      "filterFileRegex": "home-base.widget/styles.json",
+      "filterFileRegex": "styles.json",
       "decorations": [
         { "color": "#acf" }
       ]

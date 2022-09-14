@@ -9,56 +9,63 @@
     "userSelect": "auto",
     "cursor": "auto"
   },
-  "time": {
+  "dateTime": {
     "color": "<color.dateTime>",
-    "textAlign": "center",
     "fontFamily": "<font.dateTime>",
-    "fontSize": "7.5em",
-    "textShadow": "4px 4px <color.shadow>",
-    "lineHeight": 1,
+    "textAlign": "center",
+    "lineHeight": 1
+  },
+  "time": {
+    "fontSize": "120px",
     "letterSpacing": "0.05em",
+    "textShadow": "4px 4px <color.shadow>",
     "& > span:nth-child(2)": {
-      "marginLeft": "0.3em",
+      "marginLeft": "0.2em",
       "fontSize": "0.33em",
-      "textTransform": "uppercase",
       "letterSpacing": "0.1em"
     }
   },
   "date": {
-    "color": "<color.dateTime>",
-    "textAlign": "center",
-    "fontFamily": "<font.dateTime>",
-    "fontSize": "1.3em",
-    "textShadow": "3px 3px <color.shadow>",
-    "textTransform": "uppercase",
-    "letterSpacing": "0.1em"
+    "fontSize": "22px",
+    "letterSpacing": "0.1em",
+    "textShadow": "3px 3px <color.shadow>"
   },
   "search": {
-    "color": "<color.search.text>",
-    "fontFamily": "<font.search>",
-    "marginTop": "3em",
-    "borderRadius": "1.25em",
-    "backgroundColor": "<color.search.background>",
+    "marginTop": "48px",
+    "borderRadius": "20px",
     "overflow": "hidden",
+    "color": "<color.search.text>",
+    "backgroundColor": "<color.search.background>",
+    "fontFamily": "<font.search>",
     "boxShadow": "0 4px 8px 0 <color.shadow>, 0 6px 20px 0 <color.shadow>"
   },
   "searchBar": {
-    "width": 540,
-    "height": "2.5em",
+    "width": "540px",
+    "height": "40px",
     "display": "flex",
-    "& > img": {
-      "padding": "0.75em 0",
-      "filter": "<color.search.icon>"
+    "& > button": {
+      "margin": 0,
+      "padding": 0,
+      "width": "40px",
+      "background": "none",
+      "outline": "none",
+      "border": "none",
+      "& > img": {
+        "width": "16px",
+        "height": "16px",
+        "padding": "12px",
+        "filter": "<color.search.icon>"
+      }
     },
     "& > input[type='search']": {
       "margin": 0,
-      "padding": "0 0.75em 0 0",
+      "padding": "0 12px 0 0",
       "outline": "none",
       "border": "none",
       "background": "none",
       "color": "inherit",
       "flexGrow": 1,
-      "fontSize": "1.2em",
+      "fontSize": "19px",
       "&::placeholder": {
         "color": "<color.search.placeholder>"
       }
@@ -71,18 +78,19 @@
     "&:before": {
       "content": "''",
       "display": "block",
-      "width": "calc(100% - 2.5em)",
-      "marginLeft": "1.25em",
+      "width": "calc(100% - 40px)",
+      "marginLeft": "20px",
       "borderTop": "1px solid <color.search.divider>"
     },
     "& > li": {
       "display": "flex",
       "alignItems": "center",
       "margin": 0,
-      "padding": "0 0.75em 0 2.5em",
+      "padding": "0 12px 0 40px",
       "outline": "none",
-      "height": "2.5em",
+      "height": "40px",
       "cursor": "default",
+      "fontSize": "16px",
       "transition": "background-color 0.15s ease-in",
       "&:hover, &:active, &:focus": {
         "backgroundColor": "<color.search.backgroundHover>"

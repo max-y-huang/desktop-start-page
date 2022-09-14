@@ -106,6 +106,7 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
   }
 
   const onSearchElementKeyDown = (event, query) => {
+    const searchInputDOM = document.querySelector('#searchInput');
     if (event.key === 'Enter') {
       event.preventDefault();
       search(query);
@@ -118,6 +119,8 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
     }
     if (event.key === 'Tab') {
       event.preventDefault();
+      searchInputDOM.focus();
+      goToNextSearchMode();
     }
     if (event.key === 'ArrowUp') {
       event.preventDefault();
@@ -128,33 +131,27 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
       focusOnTabIndex(event.target.tabIndex + 1);
     }
     if (event.key === 'Backspace') {
-      const searchInputDOM = document.querySelector('#searchInput');
       searchInputDOM.focus();
       // do not prevent default => backspace in searchInputDOM
     }
   };
 
-  const onSearchBarKeyDown = (event) => {
-    onSearchElementKeyDown(event, event.target.value);
-    if (event.key === 'Tab') {
-      goToNextSearchMode();
-    }
-  }
-
   const { day, month, date, hour, minute, amPm } = time;
   return (
     <div className={c(styles.ignoreCursor, styles.container)}>
-      <div className={styles.time}>
-        <span>{`${Number(hour)}:${minute}`}</span>
-        <span>{amPm}</span>
+      <div className={styles.dateTime}>
+        <div className={styles.time}>
+          <span>{`${Number(hour)}:${minute}`}</span>
+          <span>{amPm}</span>
+        </div>
+        <div className={styles.date}>{`${day}, ${month} ${date}`}</div>
       </div>
-      <div className={styles.date}>{`${day}, ${month} ${date}`}</div>
       {showSearchBar && (
         <div id='searchContainer' className={styles.search}>
           <div className={styles.searchBar}>
-            {/* <button className={styles.useCursor}  onClick={goToNextSearchMode}> */}
+            <button className={styles.useCursor} onClick={(goToNextSearchMode)}>
               <img src={searchModes[searchMode].iconSrc} draggable={false} />
-            {/* </button> */}
+            </button>
             <input
               type='search'
               id='searchInput'
@@ -162,7 +159,7 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
               className={c(styles.useCursor, 'arrowTabbable')}
               spellCheck={false}
               placeholder={searchModes[searchMode].searchPlaceholder}
-              onKeyDown={onSearchBarKeyDown}
+              onKeyDown={(event) => onSearchElementKeyDown(event, event.target.value)}
               onChange={(event) => showSuggestions(event.target.value)}
             />
           </div>
