@@ -10,7 +10,7 @@ const position = {
   transform: 'translateX(-50%)'
 };
 
-// select theme from theme.json
+// select theme from themes.json
 const theme = 'light';
 
 // date time settings
@@ -91,6 +91,12 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
     }
   };
 
+  const deleteSuggestion = async (query, mode = searchMode) => {
+    const searchInputDOM = document.querySelector('#searchInput');
+    await removeQueryFromHistory(query, searchModes[mode].historySrc);
+    await showSuggestions(searchInputDOM.value, mode);
+  }
+
   const clearSearch = () => {
     const searchInputDOM = document.querySelector('#searchInput');
     searchInputDOM.value = '';
@@ -135,17 +141,20 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
       event.preventDefault();
       focusOnTabIndex(event.target.tabIndex + 1);
     }
-    if (event.key === 'Backspace') {
-      searchInputDOM.focus();
-      // do not prevent default => backspace in searchInputDOM
-    }
   };
 
+  const onSuggestionKeyDown = (event, query) => {
+    onSearchElementKeyDown(event, query);
+    if (event.key === 'Backspace') {
+      event.preventDefault();
+      focusOnTabIndex(event.target.tabIndex - 1);
+      deleteSuggestion(query);
+    }
+  }
+
   const onDeleteHistoryButtonClick = async (event, query) => {
-    const searchInputDOM = document.querySelector('#searchInput');
     event.stopPropagation();
-    await removeQueryFromHistory(query, searchModes[searchMode].historySrc);
-    showSuggestions(searchInputDOM.value);
+    deleteSuggestion(query);
   }
 
   const { day, month, date, hour, minute, amPm } = time;
@@ -183,7 +192,7 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
                   tabIndex={i + 2}  // tabIndex=1 taken by search input => start at tabIndex=2
                   className={c(styles.useCursor, 'arrowTabbable', fromHistory ? 'fromHistory' : null)}
                   onMouseDown={(event) => event.preventDefault()}  // prevent loss of focus
-                  onKeyDown={(event) => onSearchElementKeyDown(event, suggestion)}
+                  onKeyDown={(event) => onSuggestionKeyDown(event, suggestion)}
                   onClick={() => search(suggestion)}
                 >
                   <span>{suggestion}</span>

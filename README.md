@@ -1,8 +1,6 @@
 # Home Base
 
-An [Übersicht](http://tracesof.net/uebersicht/) widget.
-
-Built for OSX (MacOS).
+An [Übersicht](http://tracesof.net/uebersicht/) widget. Built for OSX (MacOS).
 
 ![Screenshot](screenshot.png)
 
@@ -15,9 +13,10 @@ Built for OSX (MacOS).
   * Autocomplete suggestions when in search mode through the [Datamuse API](https://www.datamuse.com/api/).
   * Uses local search history.
   * Easily navigable with keyboard.
-    * Scroll through suggestions using <kbd>↑</kbd> and <kbd>↓</kbd>.
-    * Exit search using <kbd>esc</kbd>.
     * Toggle between modes with <kbd>tab</kbd>.
+    * Scroll through suggestions with <kbd>↑</kbd> and <kbd>↓</kbd>.
+    * Remove an item from local history with <kbd>delete</kbd>.
+    * Exit search with <kbd>esc</kbd>.
 
 ## Installation
 
@@ -26,4 +25,4 @@ Built for OSX (MacOS).
 3. Move this folder into the Übersicht widgets folder.
 5. (Optional) In the menu bar, under the Übersicht icon, click **Preferences...** and check **Launch Übersicht when I login**.
 
-To customize the appearance, modify parameters at the top of `index.jsx` and in `themes.json`.
+To customize Home Base's appearance, modify parameters at the top of `index.jsx` and in `themes.json`.
