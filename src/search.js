@@ -16,8 +16,8 @@ export const searchQuery = async (query, mode, searchURL) => {
 export const addQueryToHistory = async (query, file) => {  // uses move-to-front heuristic
   await assertFile(file);
   query = encodeURIComponent(query);
-  const oldHistory = await run(`cat "${file}"`);
-  const filtered = oldHistory.trim().split('\n').filter((item) => item.toLowerCase() !== query.toLowerCase());
+  const oldHistory = (await run(`cat "${file}"`)).trim().split('\n');
+  const filtered = oldHistory.filter((item) => item.toLowerCase() !== query.toLowerCase());
   const history = [query, ...filtered].join('\n');
   await run(`echo "${history}" > ${file}`);
 };
