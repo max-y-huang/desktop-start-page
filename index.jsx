@@ -24,7 +24,9 @@ const searchEngineURL = 'https://www.google.com/search?q=<QUERY>';
 
 import { c, makeStyles } from './src/funcs';
 import { getDateTimeData } from './src/dateTime';
-import { searchQuery, updateHistory, getSuggestions } from './src/search';
+import { searchQuery, addQueryToHistory, getSuggestions, removeQueryFromHistory } from './src/search';
+
+const closeIconSrc = './home-base/src/imgs/closeIcon.svg';
 
 const searchModes = [
   {
@@ -94,7 +96,7 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
 
   const search = async (query, mode = searchMode) => {
     await searchQuery(query, searchModes[mode].mode, searchEngineURL);
-    await updateHistory(query, searchModes[mode].historySrc);
+    await addQueryToHistory(query, searchModes[mode].historySrc);
     clearSearch();
   };
 
@@ -136,6 +138,13 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
     }
   };
 
+  const onDeleteHistoryButtonClick = async (event, query) => {
+    const searchInputDOM = document.querySelector('#searchInput');
+    event.stopPropagation();
+    await removeQueryFromHistory(query, searchModes[searchMode].historySrc);
+    showSuggestions(searchInputDOM.value);
+  }
+
   const { day, month, date, hour, minute, amPm } = time;
   return (
     <div className={c(styles.ignoreCursor, styles.container)}>
@@ -149,11 +158,11 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
       {showSearchBar && (
         <div id='searchContainer' className={styles.search}>
           <div className={styles.searchBar}>
-            <button className={styles.useCursor} onClick={(goToNextSearchMode)}>
+            <button className={c(styles.useCursor, styles.searchIconButton)} onClick={goToNextSearchMode}>
               <img src={searchModes[searchMode].iconSrc} draggable={false} />
             </button>
             <input
-              type='search'
+              type='text'
               id='searchInput'
               tabIndex={1}
               className={c(styles.useCursor, 'arrowTabbable')}
@@ -174,7 +183,10 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
                   onKeyDown={(event) => onSearchElementKeyDown(event, suggestion)}
                   onClick={() => search(suggestion)}
                 >
-                  {suggestion}
+                  <span>{suggestion}</span>
+                  <button className={styles.searchIconButton} onClick={(event) => onDeleteHistoryButtonClick(event, suggestion)}>
+                    <img src={closeIconSrc} draggable={false} />
+                  </button>
                 </li>
               ))}
             </ul>

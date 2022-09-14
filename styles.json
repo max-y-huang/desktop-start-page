@@ -43,28 +43,14 @@
     "width": "540px",
     "height": "40px",
     "display": "flex",
-    "& > button": {
-      "margin": 0,
-      "padding": 0,
-      "width": "40px",
-      "background": "none",
-      "outline": "none",
-      "border": "none",
-      "& > img": {
-        "width": "16px",
-        "height": "16px",
-        "padding": "12px",
-        "filter": "<color.search.icon>"
-      }
-    },
-    "& > input[type='search']": {
+    "& > input[type='text']": {
       "margin": 0,
       "padding": "0 12px 0 0",
+      "flexGrow": 1,
       "outline": "none",
       "border": "none",
       "background": "none",
       "color": "inherit",
-      "flexGrow": 1,
       "fontSize": "19px",
       "&::placeholder": {
         "color": "<color.search.placeholder>"
@@ -86,18 +72,46 @@
       "display": "flex",
       "alignItems": "center",
       "margin": 0,
-      "padding": "0 12px 0 40px",
+      "padding": "0 0 0 40px",
       "outline": "none",
       "height": "40px",
       "cursor": "default",
       "fontSize": "16px",
       "transition": "background-color 0.15s ease-in",
-      "&:hover, &:active, &:focus": {
+      "&:hover, &:focus": {
         "backgroundColor": "<color.search.backgroundHover>"
       },
       "&.fromHistory": {
         "color": "<color.search.textAccent>"
+      },
+      "& > span": {
+        "flexGrow": 1
+      },
+      "&.fromHistory > button:nth-child(2)": {
+        "opacity": 0,
+        "transition": "opacity 0.15s ease-in"
+      },
+      "&.fromHistory:hover > button:nth-child(2), &.fromHistory:focus > button:nth-child(2)": {
+        "opacity": 1
+      },
+      "&:not(.fromHistory) > button:nth-child(2)": {
+        "display": "none"
       }
+    }
+  },
+  "searchIconButton": {
+    "margin": 0,
+    "padding": 0,
+    "width": "40px",
+    "background": "none",
+    "outline": "none",
+    "border": "none",
+    "userSelect": "none",
+    "& > img": {
+      "width": "16px",
+      "height": "16px",
+      "padding": "12px",
+      "filter": "<color.search.icon>"
     }
   }
 }
