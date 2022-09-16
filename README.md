@@ -12,11 +12,13 @@ An [Übersicht](http://tracesof.net/uebersicht/) widget. Built for OSX (MacOS).
   * 2 modes: search mode (configurable search engine), and URL mode.
   * Autocomplete suggestions when in search mode through the [Datamuse API](https://www.datamuse.com/api/).
   * Uses local search history.
-  * Easily navigable with keyboard.
-    * Toggle between modes with <kbd>tab</kbd>.
-    * Scroll through suggestions with <kbd>↑</kbd> and <kbd>↓</kbd>.
-    * Remove an item from local history with <kbd>delete</kbd>.
-    * Exit search with <kbd>esc</kbd>.
+  * Easily navigable with keyboard (see [Controls](#Controls)).
+
+## Controls
+  * Toggle between modes with <kbd>tab</kbd>.
+  * Scroll through suggestions with <kbd>↑</kbd> and <kbd>↓</kbd>.
+  * Remove an item from local history with <kbd>delete</kbd>.
+  * Exit search with <kbd>esc</kbd>.
 
 ## Installation
 

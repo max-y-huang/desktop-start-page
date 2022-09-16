@@ -1,7 +1,13 @@
-/*******************************************************
- * DESKTOP START PAGE
- * Edit the settings below
- *******************************************************/
+/*******************************************************************************
+ * HOME BASE
+ * A date time and search bar widget powered by Übersicht.
+ * 
+ * Edit "User Settings" in this file for customization options.
+ * Edit themes in themes.json.
+ * See README.md for more info.
+ *******************************************************************************/
+
+////////// START OF USER SETTINGS. EDIT BELOW. /////////////////////////////////
 
 // CSS for determining widget position
 const position = {
@@ -21,8 +27,7 @@ const showSearchBar = true;
 const maxSuggestions = 6;  // set to -1 for unlimited suggestions
 const searchEngineURL = 'https://www.google.com/search?q=<QUERY>';
 
-
-////////////////// END OF USER SETTINGS. DO NOT EDIT FURTHER //////////////////
+////////// END OF USER SETTINGS. DO NOT EDIT FURTHER. //////////////////////////
 
 
 import { c, makeStyles } from './src/funcs';
@@ -75,7 +80,9 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
   }
 
   const showSuggestionsFlag = () => {
-    return (document.querySelector('#searchContainer')?.contains(document.activeElement)) && (suggestions.length > 0);
+    let show = document.querySelector('#searchContainer')?.contains(document.activeElement)
+    show = show && (suggestions.length > 0)
+    return show;
   };
 
   const showSuggestions = async (query, mode = searchMode) => {
@@ -118,37 +125,39 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
 
   const onSearchElementKeyDown = (event, query) => {
     const searchInputDOM = document.querySelector('#searchInput');
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter') {  // search query
       event.preventDefault();
       search(query);
       event.target.blur();
     }
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape') {  // clears and exits search bar
       event.preventDefault();
       clearSearch();
       event.target.blur();
     }
-    if (event.key === 'Tab') {
+    if (event.key === 'Tab') {  // switches search mode
       event.preventDefault();
       searchInputDOM.focus();
       goToNextSearchMode();
     }
-    if (event.key === 'ArrowUp') {
+    if (event.key === 'ArrowUp') {  // scroll up through suggestions/search input
       event.preventDefault();
       focusOnTabIndex(event.target.tabIndex - 1);
     }
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown') {  // scroll down through suggestions/search input
       event.preventDefault();
       focusOnTabIndex(event.target.tabIndex + 1);
     }
   };
 
-  const onSuggestionKeyDown = (event, query) => {
+  const onSuggestionKeyDown = (event, query, fromHistory) => {
     onSearchElementKeyDown(event, query);
-    if (event.key === 'Backspace') {
-      event.preventDefault();
-      focusOnTabIndex(event.target.tabIndex - 1);
-      deleteSuggestion(query);
+    if (fromHistory) {
+      if (event.key === 'Backspace') {  // deletes search history item
+        event.preventDefault();
+        focusOnTabIndex(event.target.tabIndex - 1);
+        deleteSuggestion(query);
+      }
     }
   }
 
@@ -158,8 +167,9 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
   }
 
   const { day, month, date, hour, minute, amPm } = time;
-  return (
-    <div className={c(styles.ignoreCursor, styles.container)}>
+
+  const renderDateTime = () => {
+    return (
       <div className={styles.dateTime}>
         <div className={styles.time}>
           <span>{`${Number(hour)}:${minute}`}</span>
@@ -167,44 +177,61 @@ export const render = ({ time, suggestions, searchMode }, dispatch) => {
         </div>
         <div className={styles.date}>{`${day}, ${month} ${date}`}</div>
       </div>
-      {showSearchBar && (
-        <div id='searchContainer' className={styles.search}>
-          <div className={styles.searchBar}>
-            <button className={c(styles.useCursor, styles.searchIconButton)} onClick={goToNextSearchMode}>
-              <img src={searchModes[searchMode].iconSrc} draggable={false} />
+    );
+  }
+
+  const renderSuggestions = () => {
+    return (
+      <ul className={styles.searchSuggestions}>
+        {suggestions.map(({ suggestion, fromHistory }, i) => (
+          <li
+            key={suggestion}
+            tabIndex={i + 2}  // tabIndex=1 taken by search input => start at tabIndex=2
+            className={c(styles.useCursor, 'arrowTabbable', fromHistory ? 'fromHistory' : null)}
+            onMouseDown={(event) => event.preventDefault()}  // prevent loss of focus
+            onKeyDown={(event) => onSuggestionKeyDown(event, suggestion, fromHistory)}
+            onClick={() => search(suggestion)}
+          >
+            <span>{suggestion}</span>
+            <button
+              className={styles.searchIconButton}
+              onClick={(event) => onDeleteHistoryButtonClick(event, suggestion)}
+            >
+              <img src={closeIconSrc} draggable={false} />
             </button>
-            <input
-              type='text'
-              id='searchInput'
-              tabIndex={1}
-              className={c(styles.useCursor, 'arrowTabbable')}
-              spellCheck={false}
-              placeholder={searchModes[searchMode].searchPlaceholder}
-              onKeyDown={(event) => onSearchElementKeyDown(event, event.target.value)}
-              onChange={(event) => showSuggestions(event.target.value)}
-            />
-          </div>
-          {showSuggestionsFlag() && (
-            <ul className={styles.searchSuggestions}>
-              {suggestions.map(({ suggestion, fromHistory }, i) => (
-                <li
-                  key={suggestion}
-                  tabIndex={i + 2}  // tabIndex=1 taken by search input => start at tabIndex=2
-                  className={c(styles.useCursor, 'arrowTabbable', fromHistory ? 'fromHistory' : null)}
-                  onMouseDown={(event) => event.preventDefault()}  // prevent loss of focus
-                  onKeyDown={(event) => onSuggestionKeyDown(event, suggestion)}
-                  onClick={() => search(suggestion)}
-                >
-                  <span>{suggestion}</span>
-                  <button className={styles.searchIconButton} onClick={(event) => onDeleteHistoryButtonClick(event, suggestion)}>
-                    <img src={closeIconSrc} draggable={false} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  const renderSearchBar = () => {
+    return (
+      <div id='searchContainer' className={styles.search}>
+        <div className={styles.searchBar}>
+          <button className={c(styles.useCursor, styles.searchIconButton)} onClick={goToNextSearchMode}>
+            <img src={searchModes[searchMode].iconSrc} draggable={false} />
+          </button>
+          <input
+            type='text'
+            id='searchInput'
+            tabIndex={1}
+            className={c(styles.useCursor, 'arrowTabbable')}
+            spellCheck={false}
+            placeholder={searchModes[searchMode].searchPlaceholder}
+            onKeyDown={(event) => onSearchElementKeyDown(event, event.target.value)}
+            onChange={(event) => showSuggestions(event.target.value)}
+          />
         </div>
-      )}
+        {showSuggestionsFlag() && renderSuggestions()}
+      </div>
+    );
+  }
+
+  return (
+    <div className={c(styles.ignoreCursor, styles.container)}>
+      {renderDateTime()}
+      {showSearchBar && renderSearchBar()}
     </div>
   );
 };
